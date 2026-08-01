@@ -20,6 +20,13 @@ alias staysharp='python3 /path/to/staysharp.py'
 
 State (streak + history) is stored in `~/.staysharp/state.json`.
 
+Want more than one puzzle a day? `--replay`/`-r` gives you an extra random puzzle
+without touching your streak or history:
+
+```bash
+python3 staysharp.py --replay
+```
+
 ## Puzzle types
 
 - **Guess the output** — read a short snippet, predict exactly what it prints.

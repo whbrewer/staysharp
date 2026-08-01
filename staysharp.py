@@ -1,6 +1,8 @@
 #!/usr/bin/env python3
 """StaySharp — a 1-2 minute daily Python puzzle. One attempt per day."""
+import argparse
 import json
+import random
 from datetime import date
 from pathlib import Path
 
@@ -202,6 +204,11 @@ def todays_puzzle():
     return ptype, bank[days % len(bank)]
 
 
+def random_puzzle():
+    ptype = random.choice(TYPE_ORDER)
+    return ptype, random.choice(PUZZLES[ptype])
+
+
 def update_streak(state, correct, today_str):
     if not correct:
         state["streak"] = 0
@@ -213,18 +220,19 @@ def update_streak(state, correct, today_str):
         state["streak"] = 1
 
 
-def main():
-    state = load_state()
-    today_str = date.today().isoformat()
+def parse_args():
+    parser = argparse.ArgumentParser(description="StaySharp — a daily Python puzzle.")
+    parser.add_argument(
+        "-r", "--replay",
+        action="store_true",
+        help="Play an extra random puzzle without touching today's streak or history.",
+    )
+    return parser.parse_args()
 
-    if state["last_played"] == today_str:
-        outcome = "correct" if state["last_correct"] else "incorrect"
-        print(f"Already played today ({outcome}). Streak: {state['streak']}. Come back tomorrow.")
-        return
 
-    ptype, puzzle = todays_puzzle()
+def play(ptype, puzzle, label_prefix):
     label = "Guess the output" if ptype == "guess_output" else "Spot the bug (which line number?)"
-    print(f"=== StaySharp — {today_str} — {label} ===\n")
+    print(f"=== StaySharp — {label_prefix} — {label} ===\n")
     print(puzzle["code"])
     print()
 
@@ -233,6 +241,28 @@ def main():
 
     print("\n✅ Correct!" if correct else f"\n❌ Not quite. Answer: {puzzle['answer']}")
     print(puzzle["explain"])
+    return correct
+
+
+def main():
+    args = parse_args()
+
+    if args.replay:
+        ptype, puzzle = random_puzzle()
+        play(ptype, puzzle, "replay (doesn't count toward streak)")
+        return
+
+    state = load_state()
+    today_str = date.today().isoformat()
+
+    if state["last_played"] == today_str:
+        outcome = "correct" if state["last_correct"] else "incorrect"
+        print(f"Already played today ({outcome}). Streak: {state['streak']}. Come back tomorrow.")
+        print("Use --replay/-r for an extra practice puzzle that doesn't touch your streak.")
+        return
+
+    ptype, puzzle = todays_puzzle()
+    correct = play(ptype, puzzle, today_str)
 
     update_streak(state, correct, today_str)
     state["last_played"] = today_str
