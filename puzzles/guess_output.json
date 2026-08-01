@@ -1,0 +1,65 @@
+{
+  "label": "Guess the output",
+  "puzzles": [
+    {
+      "code": "x = [1, 2, 3]\ny = x\ny.append(4)\nprint(x)",
+      "answer": "[1, 2, 3, 4]",
+      "explain": "Lists are mutable and `y = x` binds the same object, not a copy \u2014 appending to y also changes x."
+    },
+    {
+      "code": "def f(a, b=[]):\n    b.append(a)\n    return b\n\nprint(f(1))\nprint(f(2))",
+      "answer": "[1]\n[2, 1]",
+      "explain": "Mutable default arguments are created once and reused across calls, so the list keeps growing."
+    },
+    {
+      "code": "print(0.1 + 0.2 == 0.3)",
+      "answer": "False",
+      "explain": "Floating point can't represent 0.1 or 0.2 exactly, so their sum is 0.30000000000000004, not 0.3."
+    },
+    {
+      "code": "print([i for i in range(5) if i % 2][::-1])",
+      "answer": "[3, 1]",
+      "explain": "The comprehension keeps odd numbers 1 and 3, then [::-1] reverses the resulting list."
+    },
+    {
+      "code": "class A:\n    x = []\n\na, b = A(), A()\na.x.append(1)\nprint(b.x)",
+      "answer": "[1]",
+      "explain": "`x` is a class attribute shared by all instances, so mutating it through `a` is visible through `b` too."
+    },
+    {
+      "code": "print('-'.join(sorted('banana')))",
+      "answer": "a-a-a-b-n-n",
+      "explain": "sorted() on a string sorts its characters alphabetically before join inserts '-' between them."
+    },
+    {
+      "code": "def outer():\n    x = 1\n    def inner():\n        print(x)\n        x = 2\n    inner()\n\nouter()",
+      "answer": "UnboundLocalError",
+      "explain": "Assigning to x anywhere in inner() makes it a local variable for the whole function, so the print() before the assignment fails."
+    },
+    {
+      "code": "print(3 in {3: 'a'})\nprint(3 in [3, 4])",
+      "answer": "True\nTrue",
+      "explain": "`in` on a dict checks keys, and 3 is a key here; `in` on a list checks membership, and 3 is present."
+    },
+    {
+      "code": "a = (1, 2)\nb = (1, 2)\nprint(a is b)\nprint(a == b)",
+      "answer": "False\nTrue",
+      "explain": "`is` checks identity (two separate tuple objects here); `==` checks value equality, which matches."
+    },
+    {
+      "code": "print(bool('False'))",
+      "answer": "True",
+      "explain": "'False' is a non-empty string, and any non-empty string is truthy regardless of its text content."
+    },
+    {
+      "code": "print(len({1, 1, 2, 2, 3}))",
+      "answer": "3",
+      "explain": "Sets deduplicate elements automatically, so {1, 1, 2, 2, 3} only keeps 1, 2, 3."
+    },
+    {
+      "code": "print(*[1, 2, 3], sep='-')",
+      "answer": "1-2-3",
+      "explain": "The * unpacks the list into three positional args to print(), joined by the given sep instead of a space."
+    }
+  ]
+}

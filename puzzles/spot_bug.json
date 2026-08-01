@@ -1,0 +1,50 @@
+{
+  "label": "Spot the bug (which line number?)",
+  "puzzles": [
+    {
+      "code": "1  def average(nums):\n2      total = 0\n3      for n in nums:\n4          total = total + n\n5      return total / len(nums)\n6  \n7  print(average([]))",
+      "answer": "7",
+      "explain": "Calling average([]) divides by len(nums) == 0, raising ZeroDivisionError. The bug is at the call site, not inside the function."
+    },
+    {
+      "code": "1  def remove_evens(nums):\n2      for n in nums:\n3          if n % 2 == 0:\n4              nums.remove(n)\n5      return nums\n6  \n7  print(remove_evens([1, 2, 3, 4]))",
+      "answer": "2",
+      "explain": "Mutating a list (nums.remove) while iterating over it skips elements, since the iterator index advances but the list shrinks underneath it."
+    },
+    {
+      "code": "1  items = {'a': 1, 'b': 2}\n2  \n3  def bump(key):\n4      items[key] = items[key] + 1\n5  \n6  bump('c')",
+      "answer": "4",
+      "explain": "items['c'] doesn't exist yet, so reading items[key] on the right-hand side raises KeyError before it can be assigned."
+    },
+    {
+      "code": "1  def make_multipliers():\n2      fns = []\n3      for i in range(3):\n4          fns.append(lambda x: x * i)\n5      return fns\n6  \n7  print([f(10) for f in make_multipliers()])",
+      "answer": "4",
+      "explain": "The lambda captures the variable i by reference, not its value at creation time; by the time the lambdas run, i is 2 for all of them."
+    },
+    {
+      "code": "1  def get_last(items):\n2      return items[len(items)]\n3  \n4  print(get_last([1, 2, 3]))",
+      "answer": "2",
+      "explain": "Valid indices only go up to len(items) - 1; items[len(items)] is one past the end and raises IndexError."
+    },
+    {
+      "code": "1  class Counter:\n2      count = 0\n3      def increment(self):\n4          count += 1\n5  \n6  Counter().increment()",
+      "answer": "4",
+      "explain": "count inside increment refers to a local/global name, not self.count \u2014 it needs to be self.count += 1 to touch the instance/class attribute."
+    },
+    {
+      "code": "1  def double(n):\n2      result = n * 2\n3  \n4  print(double(5) + 1)",
+      "answer": "2",
+      "explain": "double() computes result but never returns it, so it implicitly returns None; adding 1 to None raises TypeError."
+    },
+    {
+      "code": "1  def factorial(n):\n2      return n * factorial(n - 1)\n3  \n4  print(factorial(5))",
+      "answer": "2",
+      "explain": "There's no base case to stop the recursion (e.g. `if n == 0: return 1`), so it recurses forever and raises RecursionError."
+    },
+    {
+      "code": "1  def sum_list(nums):\n2      total = 0\n3      for i in range(len(nums) - 1):\n4          total += nums[i]\n5      return total\n6  \n7  print(sum_list([1, 2, 3, 4]))",
+      "answer": "3",
+      "explain": "range(len(nums) - 1) stops one short, so the loop never visits the last index and the sum is missing nums[-1]."
+    }
+  ]
+}

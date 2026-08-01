@@ -32,5 +32,6 @@ python3 staysharp.py --replay
 - **Guess the output** — read a short snippet, predict exactly what it prints.
 - **Spot the bug** — find the line number responsible for a bug in the snippet.
 
-Puzzle type rotates by day. New types can be added by adding a key to `TYPE_ORDER` and a
-bank of puzzles to `PUZZLES` in `staysharp.py`.
+Puzzle type rotates by day. Puzzle content lives in `puzzles/*.json`, separate from the
+script logic — see `puzzles/README.md` for the schema and how to add more puzzles or a
+whole new type.
