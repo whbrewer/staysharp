@@ -147,6 +147,39 @@ PUZZLES = {
             "answer": "4",
             "explain": "count inside increment refers to a local/global name, not self.count — it needs to be self.count += 1 to touch the instance/class attribute.",
         },
+        {
+            "code": (
+                "1  def double(n):\n"
+                "2      result = n * 2\n"
+                "3  \n"
+                "4  print(double(5) + 1)"
+            ),
+            "answer": "2",
+            "explain": "double() computes result but never returns it, so it implicitly returns None; adding 1 to None raises TypeError.",
+        },
+        {
+            "code": (
+                "1  def factorial(n):\n"
+                "2      return n * factorial(n - 1)\n"
+                "3  \n"
+                "4  print(factorial(5))"
+            ),
+            "answer": "2",
+            "explain": "There's no base case to stop the recursion (e.g. `if n == 0: return 1`), so it recurses forever and raises RecursionError.",
+        },
+        {
+            "code": (
+                "1  def sum_list(nums):\n"
+                "2      total = 0\n"
+                "3      for i in range(len(nums) - 1):\n"
+                "4          total += nums[i]\n"
+                "5      return total\n"
+                "6  \n"
+                "7  print(sum_list([1, 2, 3, 4]))"
+            ),
+            "answer": "3",
+            "explain": "range(len(nums) - 1) stops one short, so the loop never visits the last index and the sum is missing nums[-1].",
+        },
     ],
 }
 
